@@ -21,6 +21,9 @@ void setup() {
 void draw() {
   background(240);
   
+  println("PM2.5: "+twoFive1);
+  println("PM10: "+ten1);
+  
   //Remove this block if it gets in the way
   fill(51);
   text("Main PM2.5", width/2-200, height/2-120);
