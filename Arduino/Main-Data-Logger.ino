@@ -1,24 +1,65 @@
-//import libraries
 #include <esp_now.h>
-#include <WebServer.h>
 #include <WiFi.h>
-#include <Wire.h>
 #include <WiFiUdp.h>
+#include "SdsDustSensor.h"
+#include <WebServer.h>
+#include <Wire.h>
 #include <WiFiClientSecure.h>
-
-//EDIT THESE VALUES
-const char* ssid = "SAP 2.4";
-const char* password = "37928629";
-float timeBetweenDataLog = 30;
+HardwareSerial port(2);
+SdsDustSensor sds(Serial2);
 
 
-#define CONSOLE_IP "192.168.4.2"
+
+// EDIT DETAILS
+const char* ssid = "SSID";
+const char* password = "PASSWORD";
+float timeBetweenDataLog = 10;
+#define CONSOLE_IP "192.168.0.206" //enter local ip address of computer using Processing
+
+
+unsigned long balls = 0;
+unsigned long lastBall = 0;
+
 #define CONSOLE_PORT 4210
 WiFiUDP Udp;
-IPAddress local_ip(192, 168, 4, 1);
-IPAddress gateway(192, 168, 4, 1);
-IPAddress subnet(255, 255, 255, 0);
 WebServer server(80);
+#define RXD2 16
+#define TXD2 17
+// Structure example to receive data
+// Must match the sender structure
+typedef struct struct_message {
+  int id;
+  float x;
+  float y;
+} struct_message;
+struct_message myData;
+
+struct_message board1;
+struct_message board2;
+struct_message board3;
+struct_message board4;
+struct_message board5;
+struct_message board6;
+
+struct_message boardsStruct[6] = {board1, board2, board3, board4, board5, board6};
+
+
+void OnDataRecv(const uint8_t * mac_addr, const uint8_t *incomingData, int len) {
+  char macStr[18];
+  Serial.print("Packet received from: ");
+  snprintf(macStr, sizeof(macStr), "%02x:%02x:%02x:%02x:%02x:%02x",
+           mac_addr[0], mac_addr[1], mac_addr[2], mac_addr[3], mac_addr[4], mac_addr[5]);
+  Serial.println(macStr);
+  memcpy(&myData, incomingData, sizeof(myData));
+  Serial.printf("Board ID %u: %u bytes\n", myData.id, len);
+  //  boardsStruct[myData.id - 1].id = myData.id;
+  boardsStruct[myData.id - 1].x = myData.x;
+  boardsStruct[myData.id - 1].y = myData.y;
+  Serial.printf("PM 2.5 value: %4.2f \n", boardsStruct[myData.id - 1].x);
+  Serial.printf("PM 10 value: %4.2f \n", boardsStruct[myData.id - 1].y);
+  Serial.println();
+}
+
 
 //https://script.google.com/macros/s/AKfycbxwUHKYi-M8Gxr_2bpFzNQemrFGa4uMcBiqfrL68SWPsEEfW3jNVoxgbKkzNpJ0IFjb/exec
 
@@ -43,79 +84,38 @@ float s5p10 = 0;
 float s6p25 = 0;
 float s6p10 = 0;
 
-#include "SdsDustSensor.h"
-HardwareSerial port(2);
-
-SdsDustSensor sds(Serial2);
-#define RXD2 16
-#define TXD2 17
-
-typedef struct test_struct1 { ///COMPANION INPUT1
-  float a;
-  float b;
-} test_struct1;
-test_struct1 myData1;
-typedef struct test_struct2 { ///COMPANION INPUT2
-  float a;
-  float b;
-} test_struct2;
-test_struct2 myData2;
-typedef struct test_struct3 { ///COMPANION INPUT3
-  float a;
-  float b;
-} test_struct3;
-test_struct3 myData3;
-typedef struct test_struct4 { ///COMPANION INPUT4
-  float a;
-  float b;
-} test_struct4;
-test_struct4 myData4;
-typedef struct test_struct5 { ///COMPANION INPUT5
-  float a;
-  float b;
-} test_struct5;
-test_struct5 myData5;
-typedef struct test_struct6 { ///COMPANION INPUT6
-  float a;
-  float b;
-} test_struct6;
-test_struct6 myData6;
-
 
 void setup() {
-  //  Serial.begin(9600);
+  // Initialize Serial Monitor
   Serial.begin(9600, SERIAL_8N1, RXD2, TXD2);
   sds.begin();
 
   Serial.println(sds.queryFirmwareVersion().toString()); // prints firmware version
   Serial.println(sds.setActiveReportingMode().toString()); // ensures sensor is in 'active' reporting mode
   Serial.println(sds.setContinuousWorkingPeriod().toString()); // ensures sensor has continuous working period - default but not recommended
-  initWiFi();
 
+  // Set the device as a Station and Soft Access Point simultaneously
+  WiFi.mode(WIFI_AP_STA);
+
+  // Set device as a Wi-Fi Station
+  WiFi.begin(ssid, password);
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(1000);
+    Serial.println("Setting as a Wi-Fi Station..");
+  }
+  Serial.print("Station IP Address: ");
+  Serial.println(WiFi.localIP());
+  Serial.print("Wi-Fi Channel: ");
+  Serial.println(WiFi.channel());
+
+  // Init ESP-NOW
   if (esp_now_init() != ESP_OK) {
-    //    Serial.println("Error initializing ESP-NOW");
+    Serial.println("Error initializing ESP-NOW");
     return;
   }
   esp_now_register_recv_cb(OnDataRecv);
-
   server.begin();
-
-  //  makeIFTTTRequest();
 }
-
-void initWiFi() {
-  WiFi.mode(WIFI_STA);
-  WiFi.begin(ssid, password);
-  Serial.print("Connecting to WiFi ..");
-  while (WiFi.status() != WL_CONNECTED) {
-    Serial.print('.');
-    delay(1000);
-  }
-  Serial.println(WiFi.localIP());
-}
-
-unsigned long balls = 0;
-unsigned long lastBall = 0;
 
 void loop() {
   PmResult pm = sds.readPm();
@@ -124,10 +124,24 @@ void loop() {
     ten = pm.pm10;
     //    Serial.println(pm.toString());
   } else {
+//    twoFive = random(100);
+//    ten = random(100);
     //    Serial.print("Could not read values from sensor, reason: ");
     //    Serial.println(pm.statusToString());
   }
 
+  float s1p25 = boardsStruct[0].x;
+  float s1p10 = boardsStruct[0].y;
+  float s2p25 = boardsStruct[1].x;
+  float s2p10 = boardsStruct[1].y;
+  float s3p25 = boardsStruct[2].x;
+  float s3p10 = boardsStruct[2].y;
+  float s4p25 = boardsStruct[3].x;
+  float s4p10 = boardsStruct[3].y;
+  float s5p25 = boardsStruct[4].x;
+  float s5p10 = boardsStruct[4].y;
+  float s6p25 = boardsStruct[5].x;
+  float s6p10 = boardsStruct[5].y;
 
   Udp.beginPacket(CONSOLE_IP, CONSOLE_PORT);
   Udp.printf("M-PM2.5: ");
@@ -192,39 +206,15 @@ void loop() {
   Udp.printf(String(s6p10).c_str());
   Udp.endPacket();
 
-
-
   if ( millis() - lastBall > timeBetweenDataLog * 1000)
   {
-
     lastBall = millis();
+    Serial.println("PM 2.5: " + String(s1p25));
+    Serial.println("PM 10: " + String(s1p10));
     sendData(twoFive, ten, s1p25, s1p10, s2p25, s2p10, s3p25, s3p10, s4p25, s4p10, s5p25, s5p10, s6p25, s6p10);
-    //    makeIFTTTRequest();
   }
 
   delay(500);
-}
-
-
-void OnDataRecv(const uint8_t * mac, const uint8_t *incomingData, int len) {
-  memcpy(&myData1, incomingData, sizeof(myData1));
-  s1p25 = myData1.a;
-  s1p10 = myData1.b;
-  memcpy(&myData2, incomingData, sizeof(myData2));
-  s2p25 = myData2.a;
-  s2p10 = myData2.b;
-  memcpy(&myData3, incomingData, sizeof(myData3));
-  s3p25 = myData3.a;
-  s3p10 = myData3.b;
-  memcpy(&myData4, incomingData, sizeof(myData4));
-  s4p25 = myData4.a;
-  s4p10 = myData4.b;
-  memcpy(&myData5, incomingData, sizeof(myData5));
-  s5p25 = myData5.a;
-  s5p10 = myData5.b;
-  memcpy(&myData6, incomingData, sizeof(myData6));
-  s6p25 = myData6.a;
-  s6p10 = myData6.b;
 }
 
 
@@ -290,5 +280,3 @@ void sendData(float x0, float y0, float x1, float y1, float x2, float y2, float 
   Serial.println("==========");
   Serial.println("closing connection");
 }
-
-
