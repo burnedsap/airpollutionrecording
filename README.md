@@ -27,10 +27,37 @@ RXD to TX2
 GND to GND
 5V to VIN
 
+
 Mark one of the ESP32's as the 'Main' with paper tape and flash the code from the folder Arduino/Main.ino to it.
 
-Mark the other ESP32's numerically as '1', '2', '3' and so forth, and flash the code from the folder Arduino/Support-1.ino, Arduino/Support-2.ino, Arduino/Support-3.ino, and so on. Remember the numbers-they are important!
+
+#### Find MAC Address of the Main ESP32
+
+This 'Main' ESP32 will collect data from other ESP's, hence we will need to find it's MAC Address.
+
+Run this code below on the 'Main' ESP32 to find it's MAC address:
+
+```
+#ifdef ESP32
+  #include <WiFi.h>
+#else
+  #include <ESP8266WiFi.h>
+#endif
+
+void setup(){
+  Serial.begin(115200);
+  Serial.println();
+  Serial.print("ESP Board MAC Address:  ");
+  Serial.println(WiFi.macAddress());
+}
+ 
+void loop(){
+}
+```
+
+Open the Serial Monitor to see the MAC address
+
+Mark the other ESP32's numerically as '1', '2', '3' and so forth, and flash the code from the folder Arduino/Support-1.ino, Arduino/Support-2.ino, Arduino/Support-3.ino, and so on. Remember the numbers-they are important! Replace the MAC address with the one from the 'Main' one.
 
 
 Now that all the code has been flashed, set up the ESP32 + PM sensor and power them up. Open your computer and connect to the WiFi network with the name 'ESP32' and the password is '12345678'. Open the Processing sketch and hit the play button. The resulting visuals should show the PM data on a line graph.
-
