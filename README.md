@@ -14,6 +14,7 @@
 - Download the [Arduino IDE](https://www.arduino.cc/en/software)
 - Go to Sketch -> Include Library -> Manage Library -> Type in "SDS011"
 - Install the 'Nova Fitness Sds dust sensors library' by Pawel Kolodziejczyk
+- Install the [ESP32 libraries](https://randomnerdtutorials.com/installing-the-esp32-board-in-arduino-ide-windows-instructions/)
 
 
 ### Setup
