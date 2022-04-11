@@ -4,14 +4,12 @@
 #include <WiFi.h>
 #include <Wire.h>
 #include <WiFiUdp.h>
-
+#include <WiFiClientSecure.h>
 
 //EDIT THESE VALUES
-
 const char* ssid = "SAP 2.4";
 const char* password = "37928629";
-
-float timeBetweenDataLog = 12;
+float timeBetweenDataLog = 30;
 
 
 #define CONSOLE_IP "192.168.4.2"
@@ -21,15 +19,14 @@ IPAddress local_ip(192, 168, 4, 1);
 IPAddress gateway(192, 168, 4, 1);
 IPAddress subnet(255, 255, 255, 0);
 WebServer server(80);
-#include <WiFiClientSecure.h>
 
-//https://script.google.com/macros/s/AKfycbzRJZi91wcq7vCb6Pgjyq-K9KW_Ms0ZCNEVs8RjEr3AY2LOAJyYogu3F6U7b-UtEjQN/exec
+//https://script.google.com/macros/s/AKfycbxwUHKYi-M8Gxr_2bpFzNQemrFGa4uMcBiqfrL68SWPsEEfW3jNVoxgbKkzNpJ0IFjb/exec
 
 const char* host = "script.google.com";
 const int httpsPort = 443;
 //WiFiClientSecure client;
 const char* fingerprint = "46 B2 C3 44 9C 59 09 8B 01 B6 F8 BD 4C FB 00 74 91 2F EF F6";
-String GAS_ID = "AKfycbzRJZi91wcq7vCb6Pgjyq-K9KW_Ms0ZCNEVs8RjEr3AY2LOAJyYogu3F6U7b-UtEjQN";  // Replace by your GAS service id
+String GAS_ID = "AKfycbxwUHKYi-M8Gxr_2bpFzNQemrFGa4uMcBiqfrL68SWPsEEfW3jNVoxgbKkzNpJ0IFjb";  // Replace by your GAS service id
 
 float twoFive;
 float ten;
