@@ -60,5 +60,5 @@ Open the Serial Monitor to see the MAC address
 
 For Data logging: 
 
-Mark the other ESP32's numerically as '1', '2', '3' and so forth, and flash the code from the folder Arduino/Support. Change the ```BOARD_ID``` number on each file which corresponds to each ESP. Remember the numbers-they are important! Replace the MAC address with the one from the 'Main' one.
+Mark the other ESP32's numerically as '1', '2', '3' and so forth, and flash the code from the folder Arduino/Support. Change the ```BOARD_ID``` number on each file which corresponds to each ESP. Remember the numbers-they are important! Replace the MAC address with the one from the 'Main' one. Also, add the Wifi SSID and change the interval the data is sent to the main ESP. It's currently at half a second (500 milliseconds).
 
