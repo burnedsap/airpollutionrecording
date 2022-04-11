@@ -258,12 +258,12 @@ void sendData(float x0, float y0, float x1, float y1, float x2, float y2, float 
   String string_x6     =  String(x6, DEC);
   String string_y6     =  String(y6, DEC);
   String url = "/macros/s/" + GAS_ID + "/exec?mp25=" + string_x0 + "&mp10=" + string_y0 +
-               "/exec?s1p25=" + string_x1 + "&s1p10=" + string_y1 +
-               "/exec?s2p25=" + string_x2 + "&s2p10=" + string_y2 +
-               "/exec?s3p25=" + string_x3 + "&s3p10=" + string_y3 +
-               "/exec?s4p25=" + string_x4 + "&s4p10=" + string_y4 +
-               "/exec?s5p25=" + string_x5 + "&s5p10=" + string_y5 +
-               "/exec?s6p25=" + string_x6 + "&s6p10=" + string_y6;
+               "&s1p25=" + string_x1 + "&s1p10=" + string_y1 +
+               "&s2p25=" + string_x2 + "&s2p10=" + string_y2 +
+               "&s3p25=" + string_x3 + "&s3p10=" + string_y3 +
+               "&s4p25=" + string_x4 + "&s4p10=" + string_y4 +
+               "&s5p25=" + string_x5 + "&s5p10=" + string_y5 +
+               "&s6p25=" + string_x6 + "&s6p10=" + string_y6;
   Serial.print("requesting URL: ");
   Serial.println(url);
   client.print(String("GET ") + url + " HTTP/1.1\r\n" +
