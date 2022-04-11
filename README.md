@@ -58,7 +58,7 @@ void loop(){
 
 Open the Serial Monitor to see the MAC address
 
-Mark the other ESP32's numerically as '1', '2', '3' and so forth, and flash the code from the folder Arduino/Support-1.ino, Arduino/Support-2.ino, Arduino/Support-3.ino, and so on. Remember the numbers-they are important! Replace the MAC address with the one from the 'Main' one.
+For Data logging: 
 
+Mark the other ESP32's numerically as '1', '2', '3' and so forth, and flash the code from the folder Arduino/Support. Change the ```BOARD_ID``` number on each file which corresponds to each ESP. Remember the numbers-they are important! Replace the MAC address with the one from the 'Main' one.
 
-Now that all the code has been flashed, set up the ESP32 + PM sensor and power them up. Open your computer and connect to the WiFi network with the name 'ESP32' and the password is '12345678'. Open the Processing sketch and hit the play button. The resulting visuals should show the PM data on a line graph.
