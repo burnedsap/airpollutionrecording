@@ -75,6 +75,6 @@ Open Processing/Sensor_Readout.pde from Github, and run that code. Values should
 
 
 ### Things to test
--[ ] Does the ESP32 stop working after 10 mins or does the Google Sheet API stop?
--[ ] Does changing the Google Sheet logging time from 10s to 60s help? 
+- [ ] Does the ESP32 stop working after 10 mins or does the Google Sheet API stop?
+- [ ] Does changing the Google Sheet logging time from 10s to 60s help? 
 
