@@ -1,6 +1,13 @@
+/*
+
+ Press 'r' on the keyboard to finish recording CSV and close sketch
+ 
+ */
+
 // import UDP library
 import hypermedia.net.*;
-
+Table table;
+float timeBetweenLog = 5; //seconds between each log
 float s0a, s0b, s1a, s1b, s2a, s2b, s3a, s3b, s4a, s4b, s5a, s5b, s6a, s6b = 0.0; //store emf readings
 /*
  s0a: Main sensor PM2.5
@@ -24,6 +31,31 @@ void setup() {
   size(1400, 500);
   udp = new UDP( this, 4210 );
   udp.listen( true );
+
+  table = new Table();
+  table.addColumn("num");
+  table.addColumn("time");
+  table.addColumn("m pm2.5");
+  table.addColumn("m pm10");
+  table.addColumn("s1 pm2.5");
+  table.addColumn("s1 pm10");
+  table.addColumn("s2 pm2.5");
+  table.addColumn("s2 pm10");
+  table.addColumn("s3 pm2.5");
+  table.addColumn("s3 pm10");
+  table.addColumn("s4 pm2.5");
+  table.addColumn("s4 pm10");
+  table.addColumn("s5 pm2.5");
+  table.addColumn("s5 pm10");
+  table.addColumn("s6 pm2.5");
+  table.addColumn("s6 pm10");
+}
+
+void keyPressed() {
+  if (key == 'r') {
+    saveTable(table, "data/new-"+str(hour())+str(minute())+str(second())+".csv");
+    exit();
+  }
 }
 
 int timer=0;
@@ -44,6 +76,27 @@ void draw() {
   text("S5 PM10: "+s5b, width*2/3, 355);
   text("S6 PM2.5: "+s6a, width*1/3, 400);
   text("S6 PM10: "+s6b, width*2/3, 400);
+
+  if (millis()-timer>timeBetweenLog*1000) {
+    TableRow newRow = table.addRow();
+    newRow.setInt("num", table.getRowCount() - 1);
+    newRow.setString("time", str(hour())+str(minute())+str(second()));
+    newRow.setFloat("m pm2.5", s0a);
+    newRow.setFloat("m pm10", s0b);
+    newRow.setFloat("s1 pm2.5", s1a);
+    newRow.setFloat("s1 pm10", s1b);
+    newRow.setFloat("s2 pm2.5", s2a);
+    newRow.setFloat("s2 pm10", s2b);
+    newRow.setFloat("s3 pm2.5", s3a);
+    newRow.setFloat("s3 pm10", s3b);
+    newRow.setFloat("s4 pm2.5", s4a);
+    newRow.setFloat("s4 pm10", s4b);
+    newRow.setFloat("s5 pm2.5", s5a);
+    newRow.setFloat("s5 pm10", s5b);
+    newRow.setFloat("s6 pm2.5", s6a);
+    newRow.setFloat("s6 pm10", s6b);
+    timer=millis();
+  }
 }
 
 void receive( byte[] data, String ip, int port ) {  // <-- extended handler
