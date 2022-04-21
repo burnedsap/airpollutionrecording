@@ -73,6 +73,8 @@ Change the value in the Main-Data-Logger.ino file:
 
 Open Processing/Sensor_Readout.pde from Github, and run that code. Values should start changing on the screen.
 
+IMPORTANT: press 'r' on your keyboard before closing the sketch. This will save the file as a CSV and exit on it's own. Don't forget to press 'r' before closing!
+
 
 ### Things to test
 - [ ] Does the ESP32 stop working after 10 mins or does the Google Sheet API stop?
