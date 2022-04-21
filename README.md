@@ -62,3 +62,19 @@ For Data logging:
 
 Mark the other ESP32's numerically as '1', '2', '3' and so forth, and flash the code from the folder Arduino/Support. Change the ```BOARD_ID``` number on each file which corresponds to each ESP. Remember the numbers-they are important! Replace the MAC address with the one from the 'Main' one. Also, add the Wifi SSID and change the interval the data is sent to the main ESP. It's currently at half a second (500 milliseconds).
 
+
+### See Values in Processing
+
+Find the local IP address of the computer which will run the Processing code. For the Mac, System Preferences -> Network
+
+Change the value in the Main-Data-Logger.ino file:
+
+``` #define CONSOLE_IP "192.168.0.206" //enter local ip address of computer using Processing ```
+
+Open Processing/Sensor_Readout.pde from Github, and run that code. Values should start changing on the screen.
+
+
+### Things to test
+-[ ] Does the ESP32 stop working after 10 mins or does the Google Sheet API stop?
+-[ ] Does changing the Google Sheet logging time from 10s to 60s help? 
+
