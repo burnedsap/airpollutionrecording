@@ -2,13 +2,13 @@ import java.io.*;
 import processing.javafx.*;
 import hypermedia.net.*;
 UDP udp;
-float s0a, s0b, s1a, s1b, s2a, s2b, s3a, s3b, s4a, s4b, s5a, s5b = 0.0; //store pm readings
+float s0a, s0b, s1a, s1b, s2a, s2b, s3a, s3b, s4a, s4b, s5a, s5b = 0.0; //store emf readings
 
 PFont myFont;
-Float indoorHistory;
-Float meanIndoorHistory;
-Float outdoorHistory;
-Float meanOutdoorHistory;
+float indoorHistory;
+float meanIndoorHistory;
+float outdoorHistory;
+float meanOutdoorHistory;
 int logs = 0;
 String displayMessage = "";
 String[] greetingMessages = {"Hey, I am T-71!", "How are you doing today?"};
