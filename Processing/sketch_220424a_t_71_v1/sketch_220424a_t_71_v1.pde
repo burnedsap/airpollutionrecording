@@ -1,19 +1,3 @@
-import java.io.*;
-import processing.javafx.*;
-import hypermedia.net.*;
-UDP udp;
-float s0a, s0b, s1a, s1b, s2a, s2b, s3a, s3b, s4a, s4b, s5a, s5b = 0.0; //store emf readings
-
-PFont myFont;
-float indoorHistory;
-float meanIndoorHistory;
-float outdoorHistory;
-float meanOutdoorHistory;
-int logs = 0;
-String displayMessage = "";
-String[] greetingMessages = {"Hey, I am T-71!", "How are you doing today?"};
-String[] emojiMessages = {"😀", "💁️ 🏠 👉 🤧"};
-
 /*
  s0a: Main sensor PM2.5
  s0b: Main sensor PM10
@@ -36,8 +20,25 @@ String[] emojiMessages = {"😀", "💁️ 🏠 👉 🤧"};
  Outdoor: Sensor 5
  */
 
+import java.io.*;
+import processing.javafx.*;
+import hypermedia.net.*;
+UDP udp;
+float s0a, s0b, s1a, s1b, s2a, s2b, s3a, s3b, s4a, s4b, s5a, s5b = 0.0; //store emf readings
+
+ArrayList<textScroll> textList;
+PFont myFont;
+float indoorHistory;
+float meanIndoorHistory;
+float outdoorHistory;
+float meanOutdoorHistory;
+int logs = 0;
+String displayMessage = "";
+String[] greetingMessages = {"Hey, I am T-71!", "How are you doing today?"};
+String[] emojiMessages = {"😀", "💁️ 🏠 👉 🤧"};
+
 int timer=0;
-float timeBetweenLog = 2;
+float timeBetweenLog = 8;
 void setup() {
   udp = new UDP( this, 4210 );
   udp.listen( true );
@@ -45,8 +46,12 @@ void setup() {
 
   myFont = createFont("Space Grotesk", 62);
   textFont(myFont);
+  textAlign(LEFT, CENTER);
+
+  textList = new ArrayList<textScroll>();
 
   selectMessage();
+  textList.add(new textScroll(displayMessage));
 }
 
 void draw() {
@@ -55,17 +60,25 @@ void draw() {
   if (millis()-timer>timeBetweenLog*1000) {
     timer=millis();
     selectMessage();
-    println(displayMessage);
     indoorHistory+=indoorMean();
     outdoorHistory+=s5b;
     logs++;
+    if (textList.get(textList.size()-1).yPos>width) {
+      textList.add(new textScroll(displayMessage));
+    }
+    println(textList.size());
   }
 
   meanIndoorHistory = indoorHistory/logs;
   meanOutdoorHistory = outdoorHistory/logs;
-  textSize(40);
-  fill(240, 0, 0);
-  text(displayMessage, 10, height/2);
+
+  for (int i = textList.size()-1; i >= 0; i--) {
+    textScroll p = textList.get(i);
+    p.run();
+    if (p.yPos>width*2) {
+      textList.remove(i);
+    }
+  }
 }
 
 
