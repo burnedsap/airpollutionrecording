@@ -60,7 +60,6 @@ void setup() {
 
   sds.begin();
 
-  Serial.println(sds.queryFirmwareVersion().toString()); // prints firmware version
   Serial.println(sds.setActiveReportingMode().toString()); // ensures sensor is in 'active' reporting mode
   Serial.println(sds.setContinuousWorkingPeriod().toString()); // ensures sensor has continuous working period - default but not recommended
 
