@@ -142,7 +142,7 @@ void loop() {
     }
   }
 
-  if (bright < 1) {
+  if (bright < 100) {
     fadeAmount = 2;
   }
   if (bright > 254) {
