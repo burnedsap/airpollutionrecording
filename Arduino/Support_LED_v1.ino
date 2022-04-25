@@ -2,11 +2,7 @@
 #include <esp_wifi.h>
 #include <WiFi.h>
 #include "SdsDustSensor.h"
-#include <FastLED.h>
-#define NUM_LEDS 300
-#define DATA_PIN 14
-#define BRIGHTNESS  128
-CRGB leds[NUM_LEDS];
+#include "FastLED.h"
 
 //EDIT DETAILS
 #define BOARD_ID 1
@@ -18,7 +14,12 @@ const long interval = 500;  // Interval at which to publish sensor readings
 
 //MAC Address of the receiver
 uint8_t broadcastAddress[] = {0x08, 0x3A, 0xF2, 0x8E, 0xF2, 0x94};
-
+#define LED_PIN     14
+#define LED_TYPE    WS2812B
+#define COLOR_ORDER GRB
+#define NUM_LEDS    300
+#define BRIGHTNESS  100
+CRGB leds[NUM_LEDS];
 HardwareSerial port(2);
 
 SdsDustSensor sds(Serial2);
@@ -27,7 +28,14 @@ SdsDustSensor sds(Serial2);
 
 float twoFive;
 float ten;
+float val = 0;
+float x;
 
+uint8_t blendRate = 50;  // How fast to blend.  Higher is slower.  [milliseconds]
+
+CHSV colorStart = CHSV(0, 255, 255); // starting color
+CHSV colorTarget = CHSV(160, 255, 255); // target color
+CHSV colorCurrent = colorStart;
 
 //Structure example to send data
 //Must match the receiver structure
@@ -60,11 +68,12 @@ void OnDataSent(const uint8_t *mac_addr, esp_now_send_status_t status) {
 }
 
 void setup() {
-  delay(3000); // startup delay to protect LEDs
-  FastLED.addLeds<WS2812B, DATA_PIN, RGB>(leds, NUM_LEDS);  // GRB ordering is typical
-  FastLED.setBrightness(  BRIGHTNESS );
   //Init Serial Monitor
   Serial.begin(9600, SERIAL_8N1, RXD2, TXD2);
+  delay(3000); // 3 second delay for recovery
+
+  FastLED.addLeds<LED_TYPE, LED_PIN, COLOR_ORDER>(leds, NUM_LEDS).setCorrection( TypicalLEDStrip );
+  FastLED.setBrightness(BRIGHTNESS);
 
   sds.begin();
 
@@ -122,9 +131,6 @@ void loop() {
 
     myData.x = twoFive;
     myData.y = ten;
-    CHSV color1 = CHSV(map(ten, 30, 300, 1, 255), map(twoFive, 30, 300, 1, 255), 150);
-    fill_solid(leds, NUM_LEDS, color1);
-    FastLED.show();
 
     //Send message via ESP-NOW
     esp_err_t result = esp_now_send(broadcastAddress, (uint8_t *) &myData, sizeof(myData));
@@ -135,4 +141,20 @@ void loop() {
       Serial.println("Error sending the data");
     }
   }
+  x = abs(sin(val));
+  EVERY_N_MILLISECONDS(blendRate) {
+    static uint8_t k;  // the amount to blend [0-255]
+    colorCurrent = blend(colorStart, colorTarget, k, SHORTEST_HUES);
+    fill_solid( leds, NUM_LEDS, colorCurrent );
+    leds[0] = colorTarget;  // set first pixel to always show target color
+//    Serial.print("colorCurrent:\t"); Serial.print(colorCurrent.h); Serial.print("\t");
+//    Serial.print("colorTarget:\t"); Serial.print(colorTarget.h);
+//    Serial.print("\tk: "); Serial.print(k);
+//    Serial.print("\tx: "); Serial.print(x);
+//    Serial.print("\tb: "); Serial.println(FastLED.getBrightness());
+    k  = ten;
+  }
+  val += 0.01;
+  FastLED.setBrightness(20+x*235);
+  FastLED.show();
 }
