@@ -28,10 +28,10 @@ SdsDustSensor sds(Serial2);
 
 float twoFive;
 float ten;
-float val = 0;
-float x;
-
-uint8_t blendRate = 50;  // How fast to blend.  Higher is slower.  [milliseconds]
+short bright = 255;
+int ledK;
+int fadeAmount = -1;
+uint8_t blendRate = 50 * 2; // How fast to blend.  Higher is slower.  [milliseconds]
 
 CHSV colorStart = CHSV(160, 255, 255); // starting color
 CHSV colorTarget = CHSV(0, 255, 255); // target color
@@ -141,20 +141,30 @@ void loop() {
       Serial.println("Error sending the data");
     }
   }
-  x = abs(sin(val));
+
+  if (bright < 1) {
+    fadeAmount = 2;
+  }
+  if (bright > 254) {
+    fadeAmount = -2;
+  }
+
+  bright += fadeAmount;
+
+  ledK = map(ten, 30, 300, 0, 255);
+
   EVERY_N_MILLISECONDS(blendRate) {
     static uint8_t k;  // the amount to blend [0-255]
     colorCurrent = blend(colorStart, colorTarget, k, SHORTEST_HUES);
     fill_solid( leds, NUM_LEDS, colorCurrent );
     leds[0] = colorTarget;  // set first pixel to always show target color
-//    Serial.print("colorCurrent:\t"); Serial.print(colorCurrent.h); Serial.print("\t");
-//    Serial.print("colorTarget:\t"); Serial.print(colorTarget.h);
-//    Serial.print("\tk: "); Serial.print(k);
-//    Serial.print("\tx: "); Serial.print(x);
-//    Serial.print("\tb: "); Serial.println(FastLED.getBrightness());
-    k  = ten;
+    //    Serial.print("colorCurrent:\t"); Serial.print(colorCurrent.h); Serial.print("\t");
+    //    Serial.print("colorTarget:\t"); Serial.print(colorTarget.h);
+    Serial.print("\tk: "); Serial.print(k);
+    Serial.print("\tbright: "); Serial.print(bright);
+    //    Serial.print("\tb: "); Serial.println(FastLED.getBrightness());
+    k  = ledK;
   }
-  val += 0.005;
-  FastLED.setBrightness(200+x*55);
+  FastLED.setBrightness(bright);
   FastLED.show();
 }
