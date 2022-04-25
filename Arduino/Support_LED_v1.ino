@@ -33,8 +33,8 @@ float x;
 
 uint8_t blendRate = 50;  // How fast to blend.  Higher is slower.  [milliseconds]
 
-CHSV colorStart = CHSV(0, 255, 255); // starting color
-CHSV colorTarget = CHSV(160, 255, 255); // target color
+CHSV colorStart = CHSV(160, 255, 255); // starting color
+CHSV colorTarget = CHSV(0, 255, 255); // target color
 CHSV colorCurrent = colorStart;
 
 //Structure example to send data
@@ -154,7 +154,7 @@ void loop() {
 //    Serial.print("\tb: "); Serial.println(FastLED.getBrightness());
     k  = ten;
   }
-  val += 0.01;
-  FastLED.setBrightness(20+x*235);
+  val += 0.005;
+  FastLED.setBrightness(200+x*55);
   FastLED.show();
 }
