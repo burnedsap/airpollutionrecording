@@ -15,13 +15,13 @@ class textScroll {
   }
 
   void update() {
-    scrollSpeed+=1;
+    scrollSpeed-=2;
   }
 
   void display() {
-    textSize(40);
+    textSize(70);
     fill(240, 0, 0);
-    yPos = -30-textLength+scrollSpeed;
+    yPos = width+10+scrollSpeed;
     text(textToDisplay, yPos, height/2);
   }
 }
