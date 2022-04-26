@@ -27,67 +27,98 @@ UDP udp;
 float s0a, s0b, s1a, s1b, s2a, s2b, s3a, s3b, s4a, s4b, s5a, s5b = 0.0; //store emf readings
 
 ArrayList<textScroll> textList;
+FloatList indoorHistory;
+FloatList outdoorHistory;
 PFont myFont;
-float indoorHistory;
 float meanIndoorHistory;
-float outdoorHistory;
 float meanOutdoorHistory;
 int logs = 0;
 String displayMessage = "";
-String[] greetingMessages = {"Hey, I am T-71!", "How are you doing today?"};
-String[] emojiMessages = {"😀", "💁️ 🏠 👉 🤧"};
-
+String[] greetingMessages = {"Hey, I am S-17!", "How are you doing today?"};
+float indoorHistoryTotal = 0;
+float outdoorHistoryTotal = 0;
 int timer=0;
-float timeBetweenLog = 8;
+int hourlyTimer = 0;
+float timeBetweenLog = 4;
 void setup() {
   udp = new UDP( this, 4210 );
   udp.listen( true );
   size(1464, 120);
 
-  myFont = createFont("Space Grotesk", 62);
+  myFont = createFont("Space Grotesk", 120);
   textFont(myFont);
   textAlign(LEFT, CENTER);
 
   textList = new ArrayList<textScroll>();
+  indoorHistory = new FloatList();
+  outdoorHistory = new FloatList();
 
   selectMessage();
-  textList.add(new textScroll(displayMessage));
+  if (displayMessage == "") {
+    selectMessage();
+  }
+  textList.add(new textScroll(displayMessage.toUpperCase()));
+  println(textList.size());
 }
 
 void draw() {
-  background(10);
-
+  background(0);
+  selectMessage();
   if (millis()-timer>timeBetweenLog*1000) {
     timer=millis();
-    selectMessage();
-    indoorHistory+=indoorMean();
-    outdoorHistory+=s5b;
+    indoorHistory.append(indoorMean());
+    outdoorHistory.append(s5b);
     logs++;
-    if (textList.get(textList.size()-1).yPos>width) {
-      textList.add(new textScroll(displayMessage));
-    }
-    println(textList.size());
   }
 
-  meanIndoorHistory = indoorHistory/logs;
-  meanOutdoorHistory = outdoorHistory/logs;
+  if (millis()-hourlyTimer>60*60*1000) {
+    indoorHistory.remove(0);
+    indoorHistoryTotal = 0;
+    outdoorHistory.remove(0);
+    outdoorHistoryTotal = 0;
+  }
+
+  if (textList.get(textList.size()-1).yPos<20) {
+    if (displayMessage!="") {
+      println(displayMessage.toUpperCase());
+      textList.add(new textScroll(displayMessage.toUpperCase()));
+    }
+  }
+
+  for (int i = indoorHistory.size()-1; i >= 0; i--) {
+    float p = indoorHistory.get(i);
+    indoorHistoryTotal += p;
+  }
+  for (int i = outdoorHistory.size()-1; i >= 0; i--) {
+    float p = outdoorHistory.get(i);
+    outdoorHistoryTotal += p;
+  }
+
+  meanIndoorHistory = floor(indoorHistoryTotal/logs);
+  meanOutdoorHistory = floor(outdoorHistoryTotal/logs);
 
   for (int i = textList.size()-1; i >= 0; i--) {
     textScroll p = textList.get(i);
     p.run();
-    if (p.yPos>width*2) {
-      textList.remove(i);
+  }
+  if (textList.size()>2) {
+    for (int i = textList.size()-1; i >= 0; i--) {
+      textScroll p = textList.get(i);
+      if (p.yPos<-500) {
+        textList.remove(i);
+        println("remove");
+      }
     }
   }
 }
 
 
 void selectMessage() {
-  float dice = random(7);
+  float dice = random(6);
   if ((dice>0)&&(dice<1)) {
     displayMessage = greetingMessages[int(random(greetingMessages.length))];
   } else if ((dice>1)&&(dice<2)) {
-    displayMessage = emojiMessages[int(random(emojiMessages.length))];
+    displayMessage = dataReporting();
   } else if ((dice>2)&&(dice<3)) {
     displayMessage = outdoorReporting();
   } else if ((dice>3)&&(dice<4)) {
@@ -98,8 +129,6 @@ void selectMessage() {
     if (millis()>60*60*1000) {
       displayMessage = comparisonReporting();
     }
-  } else if ((dice>6)&&(dice<7)) {
-    displayMessage = dataReporting();
   } else {
     displayMessage = "I am ill.";
   }
@@ -107,7 +136,7 @@ void selectMessage() {
 
 String outdoorReporting() {
   String outdoorVal = "";
-  if ((s5b>0)&&(s5b<=50)) {
+  if ((s5b>1)&&(s5b<=50)) {
     outdoorVal = "very good. Perfect time to go for a run.";
   } else if ((s5b>50)&&(s5b<=150)) {
     outdoorVal = "good. Let's go meet some friends.";
@@ -125,23 +154,27 @@ String outdoorReporting() {
 
 String indoorReporting() {
   String indoorVal = "";
+  String indoorValMessage = "";
   float indoorMeanVal = indoorMean();
-  if ((indoorMeanVal>0)&&(indoorMeanVal<=50)) {
-    indoorVal = "very good";
-  } else if ((indoorMeanVal>50)&&(indoorMeanVal<=150)) {
-    indoorVal = "good";
-  } else if ((indoorMeanVal>150)&&(indoorMeanVal<=300)) {
-    indoorVal = "bad";
-  } else if (indoorMeanVal>300) {
-    indoorVal = "very poor";
-  } else {
-    indoorVal = "okay";
+  if (indoorMean()>1) {
+    if ((indoorMeanVal>1)&&(indoorMeanVal<=50)) {
+      indoorVal = "very good";
+    } else if ((indoorMeanVal>50)&&(indoorMeanVal<=150)) {
+      indoorVal = "good";
+    } else if ((indoorMeanVal>150)&&(indoorMeanVal<=300)) {
+      indoorVal = "bad";
+    } else if (indoorMeanVal>300) {
+      indoorVal = "very poor";
+    } else {
+      indoorVal = "okay";
+    }
+    indoorValMessage = indoorMeanVal+"—The air quality in the house is "+indoorVal+".";
   }
-  String indoorValMessage = indoorMeanVal+"—The air quality in the house is "+indoorVal+".";
   return indoorValMessage;
 }
 
 String recommendationReporting() {
+  String recommendationMessage = "";
   String safestSpace = "";
   Float[] allpm25 = {s0b, s1b, s2b, s3b};
   int minAt = 0;
@@ -150,17 +183,18 @@ String recommendationReporting() {
     minAt = allpm25[i] < allpm25[minAt] ? i : minAt;
   }
 
-  if (minAt==0) {
-    safestSpace = "living room";
-  } else if (minAt==1) {
-    safestSpace = "Kitchen";
-  } else if (minAt==2) {
-    safestSpace = "bedroom 2";
-  } else if (minAt==3) {
-    safestSpace = "bedroom 1";
+  if (s0b+s1b+s2b+s3b>4) {
+    if (minAt==0) {
+      safestSpace = "living room";
+    } else if (minAt==1) {
+      safestSpace = "Kitchen";
+    } else if (minAt==2) {
+      safestSpace = "bedroom 2";
+    } else if (minAt==3) {
+      safestSpace = "bedroom 1";
+    }
+    recommendationMessage = "Currently, the "+safestSpace+" seems like the safest place to be.";
   }
-
-  String recommendationMessage = "Currently, the "+safestSpace+" seems like the safest place to be.";
   return recommendationMessage;
 }
 
@@ -188,21 +222,14 @@ String dataReporting() {
   float dataDice = random(4);
   String dataReportingMessage = "";
 
-  if ((dataDice>0)&&(dataDice<1)) {
-    dataReportingMessage = "Living Room: "+s0b;
-  } else if ((dataDice>1)&&(dataDice<2)) {
-    dataReportingMessage = "Kitchen Room: "+s1b;
-  } else if ((dataDice>1)&&(dataDice<2)) {
-    dataReportingMessage = "Bedroom 1: "+s2b;
-  } else if ((dataDice>1)&&(dataDice<2)) {
-    dataReportingMessage = "Bedroom 2: "+s3b;
+  if (s0a+s1b+s2b+s3b+s5b>5) {
+    dataReportingMessage = "PM10 LEVELS → LIVING ROOM "+s0b+" — KITCHEN "+s1b+" — BEDROOM-1 "+s2b+" — BEDROOM-2 "+s3b+" — OUTDOOR "+s5b;
   }
-
   return dataReportingMessage;
 }
 
 Float indoorMean() {
-  float mean = (s0b+s1b+s2b+s3b)/4;
+  float mean = floor((s0b+s1b+s2b+s3b)/4);
   return mean;
 }
 
