@@ -18,7 +18,7 @@ uint8_t broadcastAddress[] = {0x08, 0x3A, 0xF2, 0x8E, 0xF2, 0x94};
 #define LED_TYPE    WS2812B
 #define COLOR_ORDER GRB
 #define NUM_LEDS    300
-#define BRIGHTNESS  100
+#define BRIGHTNESS  255
 CRGB leds[NUM_LEDS];
 HardwareSerial port(2);
 
@@ -151,7 +151,7 @@ void loop() {
 
   bright += fadeAmount;
 
-  ledK = map(ten, 30, 300, 0, 255);
+  ledK = map(ten, 100, 200, 0, 255);
 
   EVERY_N_MILLISECONDS(blendRate) {
     static uint8_t k;  // the amount to blend [0-255]
@@ -165,6 +165,6 @@ void loop() {
     //    Serial.print("\tb: "); Serial.println(FastLED.getBrightness());
     k  = ledK;
   }
-  FastLED.setBrightness(bright);
+  FastLED.setBrightness(BRIGHTNESS);
   FastLED.show();
 }
