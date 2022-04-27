@@ -139,18 +139,91 @@ void setup() {
 
 void loop() {
 
-  float s1p25 = boardsStruct[0].x;
-  float s1p10 = boardsStruct[0].y;
-  float s2p25 = boardsStruct[1].x;
-  float s2p10 = boardsStruct[1].y;
-  float s3p25 = boardsStruct[2].x;
-  float s3p10 = boardsStruct[2].y;
-  float s4p25 = boardsStruct[3].x;
-  float s4p10 = boardsStruct[3].y;
-  float s5p25 = boardsStruct[4].x;
-  float s5p10 = boardsStruct[4].y;
-  float s6p25 = boardsStruct[5].x;
-  float s6p10 = boardsStruct[5].y;
+  if (boardsStruct[0].x < 1) {
+    float s1p25 = 0;
+  }
+  else {
+    float s1p25 = boardsStruct[0].x;
+  }
+
+  if (boardsStruct[0].y < 1) {
+    float s1p10 = 0;
+  }
+  else {
+    float s1p10 = boardsStruct[0].y;
+  }
+
+  // S2
+  if (boardsStruct[1].x < 1) {
+    float s2p25 = 0;
+  }
+  else {
+    float s2p25 = boardsStruct[1].x;
+  }
+
+  if (boardsStruct[1].y < 1) {
+    float s2p10 = 0;
+  }
+  else {
+    float s2p10 = boardsStruct[1].y;
+  }
+
+  // S3
+  if (boardsStruct[2].x < 1) {
+    float s3p25 = 0;
+  }
+  else {
+    float s3p25 = boardsStruct[2].x;
+  }
+  if (boardsStruct[2].y < 1) {
+    float s3p10 = 0;
+  }
+  else {
+    float s3p10 = boardsStruct[2].y;
+  }
+
+  // S4
+  if (boardsStruct[3].x < 1) {
+    float s4p25 = 0;
+  }
+  else {
+    float s4p25 = boardsStruct[3].x;
+  }
+  if (boardsStruct[3].y < 1) {
+    float s4p10 = 0;
+  }
+  else {
+    float s4p10 = boardsStruct[3].y;
+  }
+
+  // S5
+  if (boardsStruct[4].x < 1) {
+    float s5p25 = 0;
+  }
+  else {
+    float s5p25 = boardsStruct[4].x;
+  }
+  if (boardsStruct[4].y < 1) {
+    float s5p10 = 0;
+  }
+  else {
+    float s5p10 = boardsStruct[4].y;
+  }
+
+  // S6
+  if (boardsStruct[5].x < 1) {
+    float s6p25 = 0;
+  }
+  else {
+    float s6p25 = boardsStruct[5].x;
+  }
+  if (boardsStruct[5].y < 1) {
+    float s6p10 = 0;
+  }
+  else {
+    float s6p10 = boardsStruct[5].y;
+  }
+
 
   unsigned long currentMillis = millis();
   if (currentMillis - previousMillis >= interval) {
