@@ -261,7 +261,7 @@ void loop() {
     Serial.print("\tk: "); Serial.print(k);
     Serial.print("\tbright: "); Serial.print(bright);
     //    Serial.print("\tb: "); Serial.println(FastLED.getBrightness());
-    k  = ledK;
+    k  = ten;
   }
   FastLED.setBrightness(BRIGHTNESS);
   FastLED.show();
