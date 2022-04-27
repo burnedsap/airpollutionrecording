@@ -1,4 +1,6 @@
-# airpollutionrecording
+# My house is ill
+
+This is the documentation for the tech used in the immersive exhibit on display at Khoj Studios from the 27th of April to 21st of May 2022.
 
 ### Processing
 
@@ -76,7 +78,6 @@ Open Processing/Sensor_Readout.pde from Github, and run that code. Values should
 IMPORTANT: press 'r' on your keyboard before closing the sketch. This will save the file as a CSV and exit on it's own. Don't forget to press 'r' before closing!
 
 
-### Things to test
-- [ ] Does the ESP32 stop working after 10 mins or does the Google Sheet API stop?
-- [ ] Does changing the Google Sheet logging time from 10s to 60s help? 
+### Authors
 
+Abhimanyu Singhal, Depanshu Gola, Dhruv Singhal, and Salil Parekh
