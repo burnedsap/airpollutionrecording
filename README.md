@@ -2,6 +2,12 @@
 
 This is the documentation for the tech used in the immersive exhibit on display at Khoj Studios from the 27th of April to 21st of May 2022.
 
+The apartment uses 6 SDS011 sensors to track the Particulate Matter (PM2.5 and PM10) in the space. This sensor was chosen due it's relatively high accuracy and affordability. PM is a key component of the air pollution in New Delhi and is a good measure of the air pollution in any given space. 
+
+The lighting of the space is also controlled by the ESP32, with PM10 values defining the colour on a spectrum from blue to red. The neopixel WS2812B strip is used for the lighting. The individually addressable LED strip also makes it possible to create animations. 
+
+![circuit diagram showing the connections between the ESP32, SDS011, and the WS2812B strip](src/circuit-diagram.jpg)
+
 ### Processing
 
 - Download [Processing](https://processing.org/download)
