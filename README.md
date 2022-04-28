@@ -6,39 +6,29 @@ The apartment uses 6 SDS011 sensors to track the Particulate Matter (PM2.5 and P
 
 The lighting of the space is also controlled by the ESP32, with PM10 values defining the colour on a spectrum from blue to red. The neopixel WS2812B strip is used for the lighting. The individually addressable LED strip also makes it possible to create animations. 
 
+### Hardware Setup
+
 ![circuit diagram showing the connections between the ESP32, SDS011, and the WS2812B strip](src/circuit-diagram.jpg)
 
-### Processing
+### Software Setup
+
+#### Arduino
+
+- Download the [Arduino IDE](https://www.arduino.cc/en/software)
+- Install the [ESP32 libraries](https://randomnerdtutorials.com/installing-the-esp32-board-in-arduino-ide-windows-instructions/)
+- Go to Sketch -> Include Library -> Manage Library -> Type in "SDS011"
+- Install the 'Nova Fitness Sds dust sensors library' by Pawel Kolodziejczyk
+- Go to Sketch -> Include Library -> Manage Library -> Type in "FastLED"
+- Install the 'FastLED' library by Daniel Garcia
+
+
+#### Processing
 
 - Download [Processing](https://processing.org/download)
 - Go to Sketch -> Import Library -> Add Library -> Type in "UDP" in the search bar
 - Download the UDP library by Stephane Cousot and click Install below.
-- Then, navigate to the folder Processing and copy the code within the folder and paste it within your Processing sketch.
-- Save the file and keep it ready
 
-
-### Arduino
-
-- Download the [Arduino IDE](https://www.arduino.cc/en/software)
-- Go to Sketch -> Include Library -> Manage Library -> Type in "SDS011"
-- Install the 'Nova Fitness Sds dust sensors library' by Pawel Kolodziejczyk
-- Install the [ESP32 libraries](https://randomnerdtutorials.com/installing-the-esp32-board-in-arduino-ide-windows-instructions/)
-
-
-### Setup
-
-To set up a multiple ESP32 + PM sensor setup, collect your ESP32's and PM Sensors, wire them up and keep them ready. 
-
-Wiring config:
-
-TXD to RX2
-RXD to TX2
-GND to GND
-5V to VIN
-
-
-Mark one of the ESP32's as the 'Main' with paper tape and flash the code from the folder Arduino/Main.ino to it.
-
+### Multi ESP32+SDS011 Setup
 
 #### Find MAC Address of the Main ESP32
 
