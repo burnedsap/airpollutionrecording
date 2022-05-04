@@ -48,12 +48,12 @@ int timer=0;
 float timeBetweenLog = 4;
 float hourlyTimer = timeBetweenLog;
 
-boolean debugMode = false;
+boolean debugMode = true;
 void setup() {
   udp = new UDP( this, 4210 );
   udp.listen( true );
-  fullScreen();
-  //size(1500, 200);
+  //fullScreen();
+  size(1500, 200);
 
   myFont = createFont("Space Grotesk Bold", 120);//change to bold
   textFont(myFont);
@@ -71,6 +71,7 @@ void setup() {
 
   sounds = new SoundFile[numsounds];
   for (int i = 0; i < numsounds; i++) {
+    println("h "+i);
     sounds[i] = new SoundFile(this, (i+1) + ".mp3");
   }
   if (debugMode) {
@@ -97,8 +98,6 @@ void draw() {
     indoorHistory.append(indoorMean());
     outdoorHistory.append(s5b);
     logs++;
-
-    soundPlayer(indoorMean());
 
     if (debugMode) {
       s0a= random(30, 300);
@@ -137,7 +136,7 @@ void draw() {
   //  outdoorHistoryTotal = 0;
   //}
   //}
-
+  soundPlayer(indoorMean());
 
   if (textList.get(textList.size()-1).yPos+textList.get(textList.size()-1).textLength<width/2) {
     if (displayMessage!="") {
