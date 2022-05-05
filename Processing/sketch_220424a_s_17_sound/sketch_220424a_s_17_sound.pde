@@ -48,12 +48,12 @@ int timer=0;
 float timeBetweenLog = 4;
 float hourlyTimer = timeBetweenLog;
 
-boolean debugMode = true;
+boolean debugMode = false;
 void setup() {
   udp = new UDP( this, 4210 );
   udp.listen( true );
-  //fullScreen();
-  size(1500, 200);
+  fullScreen();
+  //size(1500, 200);
 
   myFont = createFont("Space Grotesk Bold", 120);//change to bold
   textFont(myFont);
@@ -282,7 +282,7 @@ Float indoorMean() {
   return mean;
 }
 
-void soundPlayer(float x) {
+{
   if ((x>1)&&(x<50)) {
     if (!sounds[0].isPlaying()) {
       sounds[0].play();
