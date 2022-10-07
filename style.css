@@ -1,0 +1,149 @@
+@font-face {
+  font-family: "Eiko";
+  src: url("fonts/PPEiko-Regular.woff2") format("woff2"),
+    url("fonts/PPEiko-Regular.woff") format("woff");
+}
+
+@font-face {
+  font-family: "Eiko-Italic";
+  src: url("fonts/PPEiko-LightItalic.woff2") format("woff2"),
+    url("fonts/PPEiko-LightItalic.woff") format("woff");
+}
+
+@font-face {
+  font-family: "Eiko-Medium";
+  src: url("fonts/PPEiko-Medium.woff2") format("woff2"),
+    url("fonts/PPEiko-Medium.woff") format("woff");
+}
+
+@font-face {
+  font-family: "Fraktion Sans";
+  src: url("fonts/PPFraktionSans-Variable.ttf") format("truetype-variations");
+  font-weight: 1 999;
+}
+
+:root {
+  --spacing: 1rem;
+  --articlespacer: 4rem;
+  --text-col: rgb(51, 51, 51);
+}
+
+body,
+html,
+h1,
+h3,
+small,
+article,
+p {
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  background-color: ghostwhite;
+}
+
+p {
+  font-family: Eiko;
+  color: var(--text-col);
+  line-height: 1.6;
+  margin-bottom: var(--spacing);
+  font-size: 18px;
+  max-width: 600px;
+}
+
+
+small {
+  font-family: Fraktion Sans;
+  color: rgb(120, 120, 120);
+  font-weight: 200;
+  font-size: 15px;
+}
+
+a {
+  font-family: "Eiko-Italic";
+  text-decoration: none;
+  color: inherit;
+}
+
+a:hover {
+  opacity: 50%;
+}
+
+body {
+  padding: 2rem;
+  max-width: 1920px;
+  margin: 0 auto;
+}
+
+img {
+  width: 100%;
+  /* height: 100%; */
+}
+
+h1 {
+  font-family: Fraktion Sans;
+}
+header {
+  margin-bottom: 7rem;
+}
+
+nav {
+  margin-bottom: 2rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+#logo {
+  max-width: 70px;
+}
+
+.nav-links * {
+  font-family: Fraktion Sans;
+  margin-left: 0.7rem;
+  font-weight: 300;
+  color: var(--text-col);
+}
+
+
+article {
+  margin-bottom: var(--articlespacer);
+  margin-top: var(--articlespacer);
+}
+#intro {
+  font-size: 2rem;
+  color: var(--text-col);
+  font-family: Eiko;
+  /* font-weight: 500; */
+}
+h3 {
+  font-family: Fraktion Sans;
+  color: var(--text-col);
+  font-weight: 400;
+  font-size: 24px;
+  margin-bottom: var(--spacing);
+  /* margin-top: 3rem; */
+}
+.two-col {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--spacing);
+  /* border-bottom: 1px solid lightgrey; */
+  margin-bottom: var(--spacing);
+  
+}
+
+.full-width-image {
+  margin-bottom: var(--spacing);
+}
+
+@media (max-width: 768px) {
+  .two-col {
+    grid-template-columns: repeat(1, 1fr);
+  }
+}
+
+video {
+  margin-bottom: var(--spacing);
+}
