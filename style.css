@@ -43,6 +43,12 @@ html {
   background-color: ghostwhite;
 }
 
+body {
+  padding: 2rem;
+  max-width: 1920px;
+  margin: 0 auto;
+}
+
 p {
   font-family: Eiko;
   color: var(--text-col);
@@ -70,11 +76,7 @@ a:hover {
   opacity: 50%;
 }
 
-body {
-  padding: 2rem;
-  max-width: 1920px;
-  margin: 0 auto;
-}
+
 
 img {
   width: 100%;
@@ -134,6 +136,10 @@ h3 {
   
 }
 
+#zinetext {
+  align-self: end;
+}
+
 .full-width-image {
   margin-bottom: var(--spacing);
 }
@@ -141,6 +147,9 @@ h3 {
 @media (max-width: 768px) {
   .two-col {
     grid-template-columns: repeat(1, 1fr);
+  }
+  .threesixtyview {
+    display: none;
   }
 }
 
