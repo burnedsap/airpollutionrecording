@@ -5,6 +5,7 @@ float minVal = 0; //write down the minimal value
 float maxVal = 15; //write down the max value
 float refreshTime = 4000; //time between messages
 
+PFont pixelFont, monoFont;
 float pm2, pm10;
 float twoFive, ten = 0.0;
 UDP udp;  // define the UDP object
@@ -57,6 +58,14 @@ void setup() {
   eyeonex = width / 2 - 120;
   eyetwox = width / 2 + 120;
   eyey = height / 2 - 100;
+  
+  //pixelFont = createFont("PPNeueBit-Regular.otf", 128);
+  pixelFont = createFont("PPMondwest-Bold.otf", 128);
+  
+  //monoFont = createFont("PPNeueMachina-Light.otf", 128);
+  monoFont = createFont("PPNeueMachina-Regular.otf", 128);
+  //monoFont = createFont("PPNeueMachina-Ultrabold.otf", 128);
+  //monoFont = createFont("PPNeueMachina-Ultralight.otf", 128);
 }
 
 void draw() {
@@ -148,11 +157,13 @@ void draw() {
   fill(255);
   textAlign(CENTER, CENTER);
   //  textFont(andalemono);
-  textSize(24);
+  textFont(pixelFont);
+  textSize(34);
   text(messages[index], width/2, height - 300, width - 300);
 
   // PM readings display
-  textSize(14);
+  textFont(monoFont);
+  textSize(18);
   textAlign(LEFT, BOTTOM);
   fill(#54FFAC);
   text("PM2.5: " + twoFive, 40, height - 20);
