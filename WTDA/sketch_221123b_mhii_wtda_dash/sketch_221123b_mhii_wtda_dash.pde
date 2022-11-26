@@ -2,8 +2,8 @@ import processing.javafx.*;
 import hypermedia.net.*;
 
 float minVal = 0; //write down the minimal value
-float maxVal = 200; //write down the max value
-float refreshTime = 4500; //time between messages
+float maxVal = 15; //write down the max value
+float refreshTime = 7500; //time between messages
 
 float pm2, pm10;
 float twoFive, ten = 0.0;
@@ -46,14 +46,9 @@ void setup() {
   fullScreen(FX2D);
   udp = new UDP( this, 4210 );
   udp.listen( true );
-
-  //  //rotating messages
-  //  setInterval(changeWord, 3000);
-  //changeWord();
-
   updateStatus();
 
-  //  //calculations for drawing the sin wave
+  // calculations for drawing the sin wave
   w = width / 1.5;
   dx = (TWO_PI / period) * xspacing;
   yvalues = new float[floor(w / xspacing)];
@@ -68,27 +63,22 @@ void draw() {
 
   String[] messages1 = {
     "HELLO, I AM T-71. IT'S NICE TO MEET YOU!",
-    "LET’S LOOK AT THE AIR QUALITY ON THIS FLOOR.",
-    "IT SEEMS TO BE GETTING QUITE DUSTY AROUND HERE.",
+    "LET’S LOOK AT THE AIR QUALITY IN THIS ROOM.",
     "WOAH, ACCORDING TO MY SENSOR, THE PM10 LEVEL IS " + pm10 + ".",
-    "THAT'S QUITE " + status + ".",
-    "CURRENTLY, THE PM2.5 LEVEL IS " + pm2 + ". IS THAT GOOD OR BAD?",
-    "THE WORLD HEALTH ORGANISATION SURE DOESN'T THINK SO. WHY IS THAT?",
-    "THE PM2.5 IS 8.8X HIGHER THAN THE WORLD HEALTH ORGANISATION GUIDELINES",
+    "THE PM2.5 LEVEL READING IS AT " + pm2 + ".",
+    "IS THAT GOOD OR BAD?",
+    "THE WORLD HEALTH ORGANISATION SURE DOESN'T THINK SO.",
+    "THE PM2.5 IS " + int(pm2/5) + "X HIGHER THAN WHAT W.H.O RECOMMENDS",
+    "DOES THE BLUE SKY LIE TO US?",
     "WHO DECIDES WHAT IS HEALTHY AIR AND WHAT IS NOT?",
-    "IS THE AIR CLEANER INSIDE YOUR HOUSE, OR OUTSIDE?",
-    "HOW DO YOU KNOW THAT THE AIR IS CLEAN?",
-    "CAN YOUR BODY TELL WHEN THE AIR IS CLEAN?",
-    "DOES THE GREEN LIGHT ON THE AIR PURIFIER LIE?",
-    "DO YOU FEEL SAFE FROM AIR POLLUTION WHEN YOU CLOSE YOUR WINDOWS?",
-    "THE PM2.5 LEVEL IS " + pm2*10 +". OR IS IT " + pm2*10 + "? CAN YOU TELL THE DIFFERENCE?",
-    "DOES THE BLUE SKY LIE?",
+    
+    "IF YOUR SPACES COULD SPEAK, WHAT WOULD THEY SAY?",
+    "LET’S LOOK AT THE AIR QUALITY IN THIS ROOM.",
+    "WOAH, ACCORDING TO MY SENSOR, THE PM10 LEVEL IS " + pm10 + ".",
+    "THE PM2.5 LEVEL READING IS AT " + pm2 + ".",
     "WHICH ROOM IN THIS BUILDING IS THE LEAST POLLUTED?",
-    "IF THIS SPACE COULD BREATHE, WHAT WOULD IT SAY?",
-    "THE AIR QUALITY HAS IMPROVED BY 29% IN THE LAST HOUR. I LIED. CAN YOU TELL?",
-    "HOW DO YOU FEEL ABOUT THE AIR IN YOUR HOME?",
-    "WHAT IF YOU COULD SEE THE AIR AROUND YOU?",
-    "IF YOU HOUSE COULD SPEAK, WHAT WOULD IT SAY?"
+    "IS THE AIR CLEANER INDOORS THAN WHAT IT IS OUTDOORS?",
+    "TRY MOVING THE AIR QUALITY SENSOR AROUND TO SEE HOW THE READING CHANGES"
   };
   messages = messages1;
 
@@ -115,23 +105,24 @@ void draw() {
   // draw eyes
   float r = map(sin(angle), -1, 1, 160, 150);
   noStroke();
-  fill(26, 207, 237);
+  //fill(26, 207, 237);
+  fill(255);
   ellipse(eyeonex, eyey, r, r);
   ellipse(eyetwox, eyey, r, r);
 
   // expression based on PM levels
   fill(0);
-  if (pm10 >= 200 && pm10 < 700) {
+  if (pm10 >= 10 && pm10 < 50) {
     // sad ellipses
-    float sad = map(pm10, 200, 700, 140, 350);
+    float sad = map(pm10, 10, 50, 140, 350);
     ellipse(eyeonex, eyey - 140, 300, sad);
     ellipse(eyetwox, eyey - 140, 300, sad);
-  } else if (pm10 < 200) {
+  } else if (pm10 < 10) {
     // happy ellipses
-    float happy = map(pm10, 0, 200, 360, 200);
+    float happy = map(pm10, 0, 10, 360, 200);
     ellipse(eyeonex, eyey + 140, 300, happy);
     ellipse(eyetwox, eyey + 140, 300, happy);
-  } else if (pm10 >= 700) {
+  } else if (pm10 >= 50) {
     // static expression
     ellipse(eyeonex, eyey - 140, 300, 350);
     ellipse(eyetwox, eyey - 140, 300, 350);
@@ -150,11 +141,11 @@ void draw() {
   fill(255);
   textAlign(CENTER, CENTER);
   //  textFont(andalemono);
-  textSize(36);
+  textSize(24);
   text(messages[index], width/2, height - 300, width - 300);
 
   // PM readings display
-  textSize(18);
+  textSize(14);
   textAlign(LEFT, BOTTOM);
   fill(#54FFAC);
   text("PM2.5: " + twoFive, 40, height - 20);
