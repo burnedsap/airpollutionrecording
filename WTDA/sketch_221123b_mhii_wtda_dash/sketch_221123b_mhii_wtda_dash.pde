@@ -3,7 +3,7 @@ import hypermedia.net.*;
 
 float minVal = 0; //write down the minimal value
 float maxVal = 15; //write down the max value
-float refreshTime = 7500; //time between messages
+float refreshTime = 4000; //time between messages
 
 float pm2, pm10;
 float twoFive, ten = 0.0;
@@ -63,22 +63,29 @@ void draw() {
 
   String[] messages1 = {
     "HELLO, I AM T-71. IT'S NICE TO MEET YOU!",
-    "LET’S LOOK AT THE AIR QUALITY IN THIS ROOM.",
-    "WOAH, ACCORDING TO MY SENSOR, THE PM10 LEVEL IS " + pm10 + ".",
-    "THE PM2.5 LEVEL READING IS AT " + pm2 + ".",
-    "IS THAT GOOD OR BAD?",
+    "LET’S SEE HOW WE ARE DOING TODAY",
+    "I FEEL LIKE THE AIR TODAY IS " + status +"",
+    "DO YOU AGREE?",
     "THE WORLD HEALTH ORGANISATION SURE DOESN'T THINK SO.",
-    "THE PM2.5 IS " + int(pm2/5) + "X HIGHER THAN WHAT W.H.O RECOMMENDS",
+    "THE PM2.5 IS " + int(pm2/5) + " TIMES HIGHER THAN WHAT W.H.O RECOMMENDS",
+    "WHO DECIDES WHAT IS HEALTHY AIR AND WHAT IS NOT ANYWAY?",
+    "WHAT DO YOU THINK?",
     "DOES THE BLUE SKY LIE TO US?",
-    "WHO DECIDES WHAT IS HEALTHY AIR AND WHAT IS NOT?",
-    
+    "I THINK IT SOMETIMES DOES",
+
     "IF YOUR SPACES COULD SPEAK, WHAT WOULD THEY SAY?",
-    "LET’S LOOK AT THE AIR QUALITY IN THIS ROOM.",
-    "WOAH, ACCORDING TO MY SENSOR, THE PM10 LEVEL IS " + pm10 + ".",
-    "THE PM2.5 LEVEL READING IS AT " + pm2 + ".",
-    "WHICH ROOM IN THIS BUILDING IS THE LEAST POLLUTED?",
+    "HELLO, I AM T-71. YOU ARE STILL HERE!",
+    "MY EMOTION REFLECTS THE STATE OF AIR IN THIS ROOM",
+    "IT'S BEEN RAINING THIS PAST WEEK SO TBH I HAVE BEEN FEELING GOOD",
+    "I HAVE ALWAYS LIKED RAIN",
+    "DON'T CARE MUCH FOR FLOODS",
+    "I FEEL LIKE THE AIR TODAY IS " + status +"",
+    "ACCORDING TO MY READINGS, THE PM10 LEVEL IS " + pm10 + ".",
+    "THE PM2.5 LEVEL IS " + pm2 + ".",
+    "BTW, I AM CURIOUS..",
     "IS THE AIR CLEANER INDOORS THAN WHAT IT IS OUTDOORS?",
-    "TRY MOVING THE AIR QUALITY SENSOR AROUND TO SEE HOW THE READING CHANGES"
+    "HOW IS IT IN THE GALLERY?",
+    "TRY MOVING THE AIR QUALITY SENSOR AROUND TO SEE FOR YOURSELF"
   };
   messages = messages1;
 
@@ -201,19 +208,19 @@ void updateStatus() {
   pm10 = ten;
   if (pm10 <= 25) {
     state = 1;
-    status = "GOOD";
+    status = "PRETTY GOOD";
   } else if (pm10 <= 50) {
     state = 2;
-    status = "MODERATE";
+    status = "OKAY ENOUGH";
   } else if (pm10 <= 100) {
     state = 3;
-    status = "POOR";
+    status = "A BIT BAD, COUGH!";
   } else if (pm10 <= 200) {
     state = 4;
-    status = "UNHEALTHY";
+    status = "QUITE UNHEALTHY, I DON'T KNOW HOW YOU ARE DOING IT";
   } else if (pm10 > 200) {
     state = 5;
-    status = "SEVERE";
+    status = "SEVERE, I DON'T THINK WE SHOULD BE DOING THIS";
   }
 }
 //functions to calculate and draw the wave
