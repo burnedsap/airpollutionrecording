@@ -3,6 +3,7 @@ import hypermedia.net.*;
 
 float minVal = 0; //write down the minimal value
 float maxVal = 200; //write down the max value
+float refreshTime = 4500; //time between messages
 
 float pm2, pm10;
 float twoFive, ten = 0.0;
@@ -19,7 +20,7 @@ int index = 0;
 int state = 0;
 String status;
 String[] messages;
-float refreshTime = 3000;
+
 
 //String[] messages = {
 //  "HELLO, I AM T-71. IT'S NICE TO MEET YOU!",
@@ -66,9 +67,28 @@ void setup() {
 void draw() {
 
   String[] messages1 = {
-    "HELLO, I AM T-71. IT'S NICE TO MEET YOU!", "LET’S LOOK AT THE AIR QUALITY ON THIS STREET.",
-    "IT SEEMS TO BE GETTING QUITE DUSTY AROUND HERE.", "WOAH, ACCORDING TO MY SENSOR, THE PM10 LEVEL IS " + pm10 + ".",
-    "THAT'S QUITE " + status + "."
+    "HELLO, I AM T-71. IT'S NICE TO MEET YOU!",
+    "LET’S LOOK AT THE AIR QUALITY ON THIS FLOOR.",
+    "IT SEEMS TO BE GETTING QUITE DUSTY AROUND HERE.",
+    "WOAH, ACCORDING TO MY SENSOR, THE PM10 LEVEL IS " + pm10 + ".",
+    "THAT'S QUITE " + status + ".",
+    "CURRENTLY, THE PM2.5 LEVEL IS " + pm2 + ". IS THAT GOOD OR BAD?",
+    "THE WORLD HEALTH ORGANISATION SURE DOESN'T THINK SO. WHY IS THAT?",
+    "THE PM2.5 IS 8.8X HIGHER THAN THE WORLD HEALTH ORGANISATION GUIDELINES",
+    "WHO DECIDES WHAT IS HEALTHY AIR AND WHAT IS NOT?",
+    "IS THE AIR CLEANER INSIDE YOUR HOUSE, OR OUTSIDE?",
+    "HOW DO YOU KNOW THAT THE AIR IS CLEAN?",
+    "CAN YOUR BODY TELL WHEN THE AIR IS CLEAN?",
+    "DOES THE GREEN LIGHT ON THE AIR PURIFIER LIE?",
+    "DO YOU FEEL SAFE FROM AIR POLLUTION WHEN YOU CLOSE YOUR WINDOWS?",
+    "THE PM2.5 LEVEL IS " + pm2*10 +". OR IS IT " + pm2*10 + "? CAN YOU TELL THE DIFFERENCE?",
+    "DOES THE BLUE SKY LIE?",
+    "WHICH ROOM IN THIS BUILDING IS THE LEAST POLLUTED?",
+    "IF THIS SPACE COULD BREATHE, WHAT WOULD IT SAY?",
+    "THE AIR QUALITY HAS IMPROVED BY 29% IN THE LAST HOUR. I LIED. CAN YOU TELL?",
+    "HOW DO YOU FEEL ABOUT THE AIR IN YOUR HOME?",
+    "WHAT IF YOU COULD SEE THE AIR AROUND YOU?",
+    "IF YOU HOUSE COULD SPEAK, WHAT WOULD IT SAY?"
   };
   messages = messages1;
 
@@ -152,7 +172,7 @@ void draw() {
   noFill();
   //stroke(0, 50, 200, 150);
   stroke(#54FFAC, 150);
-    fill(#54FFAC, 50);
+  fill(#54FFAC, 50);
   beginShape();
   for (int i = 0; i < twoFiveHistory.size(); i++) {
     float y = map(twoFiveHistory.get(i), minVal, maxVal, height-60, height-100);
